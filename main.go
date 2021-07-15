@@ -8,6 +8,8 @@ import (
 	"net/http"
 	"os"
 	"strings"
+
+	"github.com/ceosss/crypto-ticker/helpers"
 )
 
 func main() {
@@ -26,11 +28,9 @@ func getData(reader *bufio.Reader) {
 }
 
 func fetchData(resource string) {
-	r, err := http.Get("https://jsonplaceholder.typicode.com/" + resource + "/1")
-	if err != nil {
-		fmt.Println("An error occurred" + err.Error())
-	}
-	data, _ := ioutil.ReadAll(r.Body)
-	fmt.Println(string(data))
+	apiKey := helpers.GetApiKey()
+	res, _ := http.Get("https://api.nomics.com/v1/currencies/ticker?key=" + apiKey + "&ids=BTC,ETH,XRP&interval=1d,30d&convert=EUR&per-page=100&page=1")
+	d, _ := ioutil.ReadAll(res.Body)
+	fmt.Println(string(d))
 
 }
